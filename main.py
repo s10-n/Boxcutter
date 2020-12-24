@@ -17,7 +17,10 @@ class BoxCutter:
         self.options_button = ttk.Button(main_window, text='Options', command=self.options)
         self.options_button.grid(row=0,column=2,sticky="NEWS")
         self.dimensions = [0,0,0,0]
-        self.copy_menu = ttk.Button(self.snipped_image_label,text="Copy image to clipboard") 
+        try:
+            self.copy_menu = ttk.Button(self.snipped_image_label,text="Copy image to clipboard")
+        except:
+            pass
        
     def enterSnippingMode(self):
         self.overlay = tkinter.Toplevel(self.main_window)
@@ -37,7 +40,6 @@ class BoxCutter:
         self.dimensions = [0,0,0,0]
         self.start_x = int(self.drawing_surface.canvasx(event.x))
         self.start_y = int(self.drawing_surface.canvasx(event.y))
-        self.dimensions[0],self.dimensions[1] = self.start_x, self.start_y
         try:
             self.snipped_image_label.destroy()
         except:
@@ -46,7 +48,6 @@ class BoxCutter:
     def mouseReleased(self, event):
         self.end_x = int(self.drawing_surface.canvasx(event.x))
         self.end_y = int(self.drawing_surface.canvasx(event.y))
-        self.dimensions[2],self.dimensions[3] = self.end_x, self.end_y
         self.overlay.destroy()
         self.snipScreen()
 
@@ -61,6 +62,11 @@ class BoxCutter:
                                               width=2)
     
     def snipScreen(self):
+        self.x_list = [self.start_x, self.end_x]
+        self.y_list = [self.start_y, self.end_y]
+        self.x_list.sort()
+        self.y_list.sort()
+        self.dimensions[0],self.dimensions[1],self.dimensions[2],self.dimensions[3] = self.x_list[0],self.y_list[0],self.x_list[1],self.y_list[1]
         time.sleep(0.25)
         self.snipped_image_file = ImageGrab.grab(bbox=self.dimensions)
         print(self.dimensions)
@@ -111,9 +117,7 @@ class BoxCutter:
         output.stdin.close()
         self.copy_menu.destroy()
 #        self.status_bar = ttk.Label(self.main_window, text='Image copied to clipboard.', width=self.snip_button.winfo_reqwidth())
- #       self.status_bar.grid(row=2, column=0,sticky='W')
-
- 
+ #       self.status_bar.grid(row=2, column=0,sticky='W',columnspan=3)
         
     def save(self):
         self.saved_image = filedialog.asksaveasfile(mode='wb',
@@ -123,13 +127,13 @@ class BoxCutter:
 
     def options(self):
         self.options_menu = tkinter.Toplevel()
-
-
-                     
     
 root = tkinter.Tk(className='Boxcutter')
-#root.resizable(width=False, height=False)
+root.resizable(width=False, height=False)
 for y in range(3):
     tkinter.Grid.columnconfigure(root, y, weight=1)
+icon = tkinter.PhotoImage(file = '/home/sean/projects/boxcutter/Boxcutter icon.png')
+root.iconphoto(False, icon)
+    
 boxcutter = BoxCutter(root)
 root.mainloop()
