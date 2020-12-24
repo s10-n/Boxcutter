@@ -13,8 +13,8 @@ class BoxCutter:
         
         self.snip_button = ttk.Button(main_window, text='New snip', command=self.enterSnippingMode)
         self.snip_button.grid(row=0,column=0,sticky="NEWS")
-        
-        self.options_button = ttk.Button(main_window, text='Options', command=self.options)
+        self.options_button = ttk.Button(main_window)
+        #self.options_button = ttk.Button(main_window, text='Options', command=self.options) TODO
         self.options_button.grid(row=0,column=2,sticky="NEWS")
         self.dimensions = [0,0,0,0]
         try:
