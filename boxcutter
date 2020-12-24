@@ -1,6 +1,6 @@
+#!/usr/bin/python3
 import tkinter
 import subprocess
-import pyperclip
 import time
 import io
 from tkinter import filedialog,ttk
@@ -69,7 +69,6 @@ class BoxCutter:
         self.dimensions[0],self.dimensions[1],self.dimensions[2],self.dimensions[3] = self.x_list[0],self.y_list[0],self.x_list[1],self.y_list[1]
         time.sleep(0.25)
         self.snipped_image_file = ImageGrab.grab(bbox=self.dimensions)
-        print(self.dimensions)
         self.snipped_image = ImageTk.PhotoImage(self.snipped_image_file,master=root)
         self.snipped_image_label = ttk.Label(self.main_window, image=self.snipped_image,borderwidth=0)
         self.image_width = self.snipped_image.width()
@@ -101,7 +100,6 @@ class BoxCutter:
         self.copy_menu.destroy()
         self.mouse_x = int(event.x)
         self.mouse_y = int(event.y)
-        print('Image right clicked')
         self.copy_menu = ttk.Button(self.main_window,
                                     text="Copy image",
                                     command=self.copyImage
@@ -132,8 +130,13 @@ root = tkinter.Tk(className='Boxcutter')
 root.resizable(width=False, height=False)
 for y in range(3):
     tkinter.Grid.columnconfigure(root, y, weight=1)
-icon = tkinter.PhotoImage(file = '/home/sean/projects/boxcutter/Boxcutter icon.png')
+icon = tkinter.PhotoImage(file = '/usr/local/share/boxcutter_resources/Boxcutter icon.png')
 root.iconphoto(False, icon)
-    
+
+
+print('''Boxcutter Copyright (C) 2020 Sean Beaudoin
+    This program comes with ABSOLUTELY NO WARRANTY.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions.''')
 boxcutter = BoxCutter(root)
 root.mainloop()
